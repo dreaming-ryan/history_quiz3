@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국사능력검정시험 심화 — 랜덤 퀴즈</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23B83A3A'/><text x='50' y='68' text-anchor='middle' font-size='52' font-family='serif' font-weight='700' fill='%23fff'>韓</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#FAF7F2;--c-surface:#FFFFFF;--c-border:#E5DFD3;--c-border2:#CFC6B4;
+  --c-text:#1F1A14;--c-text2:#5A5046;--c-text3:#9A8E7C;
+  --c-accent:#B83A3A;--c-accent-l:#FBE9E9;--c-accent-d:#952E2E;
+  --c-sub1:#5C7A3B;--c-sub1-l:#EBF1E1;
+  --c-sub2:#1F5C8C;--c-sub2-l:#E2EDF6;
+  --c-sub3:#8C4A1F;--c-sub3-l:#F4E6DA;
+  --c-sub4:#5A3D8C;--c-sub4-l:#EAE0F4;
+  --c-sub5:#9C6B1F;--c-sub5-l:#F6EBD4;
+  --c-sub6:#3F3F3F;--c-sub6-l:#E5E5E5;
+  --c-sub7:#2E6B6B;--c-sub7-l:#DDF0EE;
+  --c-correct:#5C7A3B;--c-correct-l:#EBF1E1;
+  --c-wrong:#B23A3A;--c-wrong-l:#FBE7E7;
+  --r:10px;--r-sm:6px;--shadow:0 2px 12px rgba(28,26,22,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans KR",sans-serif;background:var(--c-bg);color:var(--c-text);line-height:1.7;min-height:100vh}
+.site-header{background:var(--c-surface);border-bottom:1.5px solid var(--c-border);padding:0 1.5rem;position:sticky;top:0;z-index:100}
+.header-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--c-text);text-decoration:none}
+.logo-badge{background:var(--c-accent);color:#fff;font-size:13px;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:6px;font-family:'Noto Serif KR',serif}
+.header-back{font-size:13px;color:var(--c-text2);text-decoration:none;display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r-sm);transition:background .15s,color .15s}
+.header-back:hover{background:var(--c-accent-l);color:var(--c-accent)}
+.main-wrap{max-width:800px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.ctrl-panel{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start;box-shadow:var(--shadow)}
+.ctrl-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px}
+.ctrl-label{font-size:11px;font-weight:700;color:var(--c-text3);letter-spacing:.08em;text-transform:uppercase}
+.filter-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;background:var(--c-bg);border:1.5px solid var(--c-border2);color:var(--c-text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tag:hover{border-color:var(--c-accent);color:var(--c-accent);background:var(--c-accent-l)}
+.tag.active{background:var(--c-accent);border-color:var(--c-accent);color:#fff}
+.ctrl-sep{width:1px;background:var(--c-border);align-self:stretch}
+.progress-bar-wrap{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);padding:1rem 1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-label{font-size:13px;font-weight:600;color:var(--c-text2)}
+.progress-count{font-size:20px;font-weight:700;color:var(--c-accent)}
+.progress-count span{font-size:13px;font-weight:400;color:var(--c-text3)}
+.progress-track{height:6px;background:var(--c-border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--c-accent);border-radius:3px;transition:width .4s ease}
+.stat-row{margin-top:8px}
+.stat-badge{font-size:12px;font-weight:500;color:var(--c-text3);background:var(--c-bg);padding:3px 10px;border-radius:20px;border:1px solid var(--c-border)}
+.pdf-btn-wrap{display:flex;justify-content:center;margin-bottom:1.2rem}
+.pdf-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:50px;background:linear-gradient(135deg,#B83A3A 0%,#952E2E 100%);color:#fff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:-.02em;box-shadow:0 4px 18px rgba(184,58,58,.38);transition:all .22s ease;white-space:nowrap}
+.pdf-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(184,58,58,.50);filter:brightness(1.07)}
+.pdf-btn:active{transform:translateY(0);box-shadow:0 3px 10px rgba(184,58,58,.30)}
+.pdf-btn-icon{font-size:18px;line-height:1;flex-shrink:0}
+.quiz-card{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
+.quiz-card:hover{box-shadow:0 4px 24px rgba(28,26,22,.11)}
+.card-meta{display:flex;align-items:center;gap:8px;padding:12px 1.5rem 0;flex-wrap:wrap}
+.meta-round{font-size:11px;color:var(--c-text3);background:var(--c-bg);padding:2px 8px;border-radius:4px;border:1px solid var(--c-border);font-family:'Noto Serif KR',serif;font-weight:600}
+.meta-no{font-size:11px;font-weight:700;color:var(--c-text3)}
+.cat-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.03em}
+.cat-1{background:var(--c-sub1-l);color:var(--c-sub1)}
+.cat-2{background:var(--c-sub2-l);color:var(--c-sub2)}
+.cat-3{background:var(--c-sub3-l);color:var(--c-sub3)}
+.cat-4{background:var(--c-sub4-l);color:var(--c-sub4)}
+.cat-5{background:var(--c-sub5-l);color:var(--c-sub5)}
+.cat-6{background:var(--c-sub6-l);color:var(--c-sub6)}
+.cat-7{background:var(--c-sub7-l);color:var(--c-sub7)}
+.card-body{padding:1.25rem 1.5rem 0}
+.q-text{font-size:15px;line-height:1.8;color:var(--c-text);font-weight:500}
+.q-scene{font-size:13px;background:var(--c-bg);border-left:3px solid var(--c-border2);border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;color:var(--c-text2);line-height:1.85}
+.q-scene img{max-width:100%;height:auto;border-radius:6px;margin:4px 0;display:block}
+.choices{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.choice{display:flex;gap:8px;padding:10px 12px;background:var(--c-bg);border:1.5px solid var(--c-border);border-radius:var(--r-sm);font-size:14px;line-height:1.6;color:var(--c-text2);transition:all .15s;cursor:pointer;user-select:none}
+.choice:hover{border-color:var(--c-border2);background:#FBF8F1}
+.choice-num{font-weight:700;color:var(--c-text3);flex-shrink:0;font-family:'Noto Serif KR',serif}
+.choice-text{flex:1}
+.choice-text img{max-width:100%;height:auto;border-radius:4px}
+.choice.selected{background:#FBF8F1;border-color:var(--c-text2)}
+.choice.selected .choice-num{color:var(--c-text)}
+.choice.is-correct{background:var(--c-correct-l);border-color:var(--c-correct);color:var(--c-correct)}
+.choice.is-correct .choice-num{color:var(--c-correct)}
+.choice.is-wrong{background:var(--c-wrong-l);border-color:var(--c-wrong);color:var(--c-wrong)}
+.choice.is-wrong .choice-num{color:var(--c-wrong)}
+.ans-wrap{border-top:1.5px dashed var(--c-border);overflow:hidden;max-height:0;transition:max-height .4s ease}
+.ans-wrap.open{max-height:50000px}
+.ans-body{padding:1.25rem 1.5rem}
+.answer-val{font-size:16px;font-weight:700;color:var(--c-accent);line-height:1.6;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.answer-val .answer-num{font-size:22px;font-family:'Noto Serif KR',serif}
+.answer-val img{max-width:200px;height:auto;border-radius:4px}
+.exp-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--c-border)}
+.exp-label{font-size:11px;font-weight:700;color:var(--c-text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.exp-body{font-size:13.5px;color:var(--c-text);line-height:1.85}
+.exp-body p{margin-bottom:8px}
+.exp-body strong{color:var(--c-accent)}
+.exp-body img{max-width:100%;height:auto;border-radius:6px}
+.exp-body .warn{background:#FFF8E7;border-left:3px solid #C49B4F;padding:10px 14px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12.5px;color:var(--c-text2)}
+.kw-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--c-border)}
+.kw-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.kw-pill{font-size:11px;font-weight:500;color:var(--c-accent);background:var(--c-accent-l);padding:3px 10px;border-radius:20px}
+.btn-close-ans{display:block;width:100%;margin-top:12px;background:var(--c-bg);border:1.5px solid var(--c-border);color:var(--c-text3);border-radius:var(--r-sm);padding:8px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-close-ans:hover{background:var(--c-accent-l);color:var(--c-accent);border-color:var(--c-accent)}
+.card-actions{padding:0 1.5rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:1.25rem}
+.btn-reveal{flex:0 0 auto;background:var(--c-accent);color:#fff;border:none;border-radius:var(--r-sm);padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-reveal:hover:not(:disabled){background:var(--c-accent-d);transform:translateY(-1px)}
+.btn-reveal:disabled{background:#ddd;cursor:not-allowed;color:#999}
+.btn-reveal.revealed{background:var(--c-bg);color:var(--c-text3);border:1.5px solid var(--c-border)}
+.btn-skip{background:var(--c-surface);border:1.5px solid var(--c-border2);color:var(--c-text3);border-radius:var(--r-sm);padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-skip:hover{background:var(--c-bg)}
+.btn-inquiry{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:#FEE500;color:#3A1D1D;font-size:12.5px;font-weight:700;border-radius:20px;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:opacity .15s;white-space:nowrap;margin-left:auto}
+.btn-inquiry:hover{opacity:.82}
+.btn-inquiry__icon{width:16px;height:16px;display:inline-block}
+.done-card{display:none;text-align:center;background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);padding:3rem 2rem;box-shadow:var(--shadow)}
+.done-card.show{display:block}
+.done-emoji{font-size:48px;margin-bottom:1rem}
+.done-title{font-size:22px;font-weight:700;margin-bottom:.5rem}
+.done-desc{font-size:14px;color:var(--c-text2);margin-bottom:1.5rem;white-space:pre-line}
+.btn-restart{background:var(--c-accent);color:#fff;border:none;border-radius:var(--r-sm);padding:12px 32px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-restart:hover{background:var(--c-accent-d);transform:translateY(-1px)}
+.empty-msg{display:none;text-align:center;padding:3rem 2rem;font-size:14px;color:var(--c-text3);background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r);box-shadow:var(--shadow)}
+.empty-msg.show{display:block}
+.loading{text-align:center;padding:3rem 2rem;color:var(--c-text3);font-size:14px}
+@media(max-width:600px){.ctrl-panel{flex-direction:column}.ctrl-sep{display:none}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-badge">韓</span>
+      한능검 심화 기출문제
+    </a>
+    <a href="index.html" class="header-back">← 홈으로</a>
+  </div>
+</header>
+<main class="main-wrap">
+  <div class="ctrl-panel">
+    <div class="ctrl-group">
+      <div class="ctrl-label">회차 필터</div>
+      <div class="filter-tags" id="filter-round">
+        <span class="tag active" onclick="setRound('all',this)">전체</span>
+      </div>
+    </div>
+    <div class="ctrl-sep"></div>
+    <div class="ctrl-group">
+      <div class="ctrl-label">단원 필터</div>
+      <div class="filter-tags" id="filter-subject">
+        <span class="tag active" onclick="setSubject('all',this)">전체</span>
+      </div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-row">
+      <div class="progress-label">학습 진행</div>
+      <div class="progress-count"><span id="cnt-done">0</span> / <span id="cnt-total">0</span> <span>문제</span></div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="stat-row">
+      <span class="stat-badge" id="stat-pool">총 0문제</span>
+    </div>
+  </div>
+  <div class="pdf-btn-wrap">
+    <a class="pdf-btn"
+       href="https://dreaming-ryan.com/home?product=%ED%95%9C%EB%8A%A5%EA%B2%80%20%EC%9A%94%EC%95%BD%EB%85%B8%ED%8A%B8%20PDF"
+       target="_blank" rel="noopener noreferrer">
+      <span class="pdf-btn-icon">📙</span>
+      <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
+        <span>한능검 요약노트 PDF</span>
+        <span style="font-size:13px;font-weight:500;opacity:.9">무료 샘플 받기</span>
+      </span>
+    </a>
+  </div>
+  <div id="quiz-area">
+    <div class="loading">📚 기출문제를 불러오는 중...</div>
+  </div>
+  <div class="done-card" id="done-card">
+    <div class="done-emoji">🎉</div>
+    <div class="done-title">모든 문제를 완료했습니다!</div>
+    <div class="done-desc" id="done-desc">선택한 조건의 모든 한능검 기출문제를 풀었습니다.\n다시 풀어보며 실력을 다져보세요.</div>
+    <button class="btn-restart" onclick="restart()">다시 풀기</button>
+  </div>
+  <div class="empty-msg" id="empty-msg">
+    <div style="font-size:32px;margin-bottom:12px">🔍</div>
+    선택한 조건에 해당하는 문제가 없습니다.<br>필터를 변경해 주세요.
+  </div>
+</main>
+<script src="history_stats.js"></script>
+<script>
+let curRound   = 'all';
+let curSubject = 'all';
+let pool       = [];
+let cursor     = 0;
+let questions  = [];
+let selectedIdx = null;
+
+const CIRCLE = ["①","②","③","④","⑤"];
+
+const SUBJECT_NAME = {
+  1: "1단원 · 고대국가",
+  2: "2단원 · 삼국시대",
+  3: "3단원 · 고려시대",
+  4: "4단원 · 조선시대",
+  5: "5단원 · 개화시대",
+  6: "6단원 · 일제강점기",
+  7: "7단원 · 근현대사"
+};
+
+HistoryStats.load(stats => {
+  questions = stats.questions;
+
+  // 1. 회차 필터 탭 — 내림차순
+  const roundWrap = document.getElementById('filter-round');
+  stats.rounds.forEach(r => {
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = `제${r}회`;
+    tag.onclick = function () { setRound(r, this); };
+    roundWrap.appendChild(tag);
+  });
+
+  // 2. 단원 필터 탭
+  const subjectWrap = document.getElementById('filter-subject');
+  Object.keys(stats.subjectCounts)
+    .map(n => parseInt(n, 10))
+    .sort((a, b) => a - b)
+    .forEach(n => {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = stats.subjectNames[n] || `${n}단원`;
+      tag.dataset.subject = n;
+      tag.onclick = function () { setSubject(n, this); };
+      subjectWrap.appendChild(tag);
+    });
+
+  // 3. URL 파라미터로 초기 필터 적용 (?round=75 / ?subject=3)
+  const params = new URLSearchParams(window.location.search);
+  const initRound = params.get('round');
+  const initSubject = params.get('subject');
+  if (initRound) {
+    const tag = [...roundWrap.querySelectorAll('.tag')].find(t => t.textContent === `제${initRound}회`);
+    if (tag) { roundWrap.querySelectorAll('.tag').forEach(t=>t.classList.remove('active')); tag.classList.add('active'); curRound = Number(initRound); }
+  }
+  if (initSubject) {
+    const tag = [...subjectWrap.querySelectorAll('.tag')].find(t => t.dataset.subject === initSubject);
+    if (tag) { subjectWrap.querySelectorAll('.tag').forEach(t=>t.classList.remove('active')); tag.classList.add('active'); curSubject = Number(initSubject); }
+  }
+
+  rebuildPool();
+});
+
+function setRound(v, el) {
+  curRound = v;
+  document.querySelectorAll('#filter-round .tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  rebuildPool();
+}
+
+function setSubject(v, el) {
+  curSubject = v;
+  document.querySelectorAll('#filter-subject .tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  rebuildPool();
+}
+
+function rebuildPool() {
+  const filtered = questions.filter(q => {
+    const rOk = curRound === 'all' || q.round === curRound;
+    const sOk = curSubject === 'all' || q.subject === curSubject;
+    return rOk && sOk;
+  });
+  const arr = filtered.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  pool   = arr;
+  cursor = 0;
+  selectedIdx = null;
+  updateProgress();
+  showQuestion();
+}
+
+function updateProgress() {
+  const total = pool.length;
+  const done  = cursor;
+  document.getElementById('cnt-done').textContent  = done;
+  document.getElementById('cnt-total').textContent = total;
+  document.getElementById('stat-pool').textContent = '총 ' + total + '문제';
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function showQuestion() {
+  const area     = document.getElementById('quiz-area');
+  const doneCard = document.getElementById('done-card');
+  const emptyMsg = document.getElementById('empty-msg');
+  doneCard.classList.remove('show');
+  emptyMsg.classList.remove('show');
+  area.innerHTML = '';
+
+  if (pool.length === 0) { emptyMsg.classList.add('show'); return; }
+  if (cursor >= pool.length) {
+    document.getElementById('done-desc').textContent =
+      '한능검 기출문제 ' + pool.length + '문제를 모두 풀었습니다!\n다시 풀어보며 실력을 다져보세요.';
+    doneCard.classList.add('show');
+    return;
+  }
+
+  const q = pool[cursor];
+  const subjectName = SUBJECT_NAME[q.subject] || ('단원 ' + q.subject);
+  selectedIdx = null;
+
+  // 보기 렌더링 — img 태그 그대로 / 아니면 escape
+  const choicesHTML = (q.choices || []).map((c, i) => {
+    const body = (c && c.startsWith && c.startsWith('<img')) ? c : escapeHTML(c || '');
+    return `
+      <div class="choice" data-idx="${i+1}" onclick="selectChoice(${i+1})">
+        <span class="choice-num">${CIRCLE[i]}</span>
+        <span class="choice-text">${body}</span>
+      </div>`;
+  }).join('');
+
+  // 정답 표시
+  const answerChoice = q.choices[q.answer - 1] || '';
+  const answerDisplay = (answerChoice.startsWith && answerChoice.startsWith('<img')) ? answerChoice : escapeHTML(answerChoice);
+
+  // 키워드 / 관련 개념
+  const kwHTML = (q.keywords || []).map(k => `<span class="kw-pill">#${escapeHTML(k)}</span>`).join('');
+  let relatedHTML = '';
+  if (q.related && q.related.length && typeof q.related[0] === 'object') {
+    relatedHTML = '<table style="border-collapse:collapse;width:100%;margin-top:8px;font-size:12.5px"><tbody>' +
+      q.related.map(r => `<tr><th style="background:var(--c-bg);font-weight:700;padding:6px 8px;border:1px solid var(--c-border);text-align:left;width:30%">${escapeHTML(r.term)}</th><td style="padding:6px 8px;border:1px solid var(--c-border)">${r.desc}</td></tr>`).join('') +
+      '</tbody></table>';
+  }
+
+  const subHTML = q.sub ? '<div class="q-scene">' + q.sub + '</div>' : '';
+
+  const card = document.createElement('div');
+  card.className = 'quiz-card';
+  card.innerHTML =
+    '<div class="card-meta">' +
+      '<span class="meta-round">제' + q.round + '회 심화</span>' +
+      '<span class="cat-tag cat-' + q.subject + '">' + subjectName + '</span>' +
+      '<span class="meta-no">Q.' + String(q.no).padStart(2,'0') + '</span>' +
+      '<span style="margin-left:auto;font-size:11px;color:var(--c-text3)">' + (cursor+1) + ' / ' + pool.length + '</span>' +
+    '</div>' +
+    '<div class="card-body">' +
+      '<div class="q-text">' + escapeHTML(q.stem || '') + '</div>' +
+      subHTML +
+      '<div class="choices">' + choicesHTML + '</div>' +
+    '</div>' +
+    '<div class="card-actions" id="card-actions">' +
+      '<button class="btn-skip" id="btn-skip" onclick="skip()">건너뛰기</button>' +
+      '<button class="btn-reveal" id="btn-reveal" onclick="reveal()" disabled>정답 확인</button>' +
+      '<a class="btn-inquiry" href="http://pf.kakao.com/_xeYdxlX" target="_blank" rel="noopener" onclick="event.stopPropagation()">' +
+        '<svg class="btn-inquiry__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#3A1D1D" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.78 1.86 5.22 4.66 6.62l-1.18 4.32c-.1.36.31.65.62.44l5.18-3.42c.24.02.48.04.72.04 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg> 오류신고' +
+      '</a>' +
+    '</div>' +
+    '<div class="ans-wrap" id="ans-wrap">' +
+      '<div class="ans-body">' +
+        '<div class="answer-val">' +
+          '<span class="answer-num">' + CIRCLE[q.answer - 1] + '</span>' +
+          '<span>' + answerDisplay + '</span>' +
+        '</div>' +
+        (q.explain ? '<div class="exp-section"><div class="exp-label">해설</div><div class="exp-body">' + q.explain + '</div></div>' : '') +
+        (kwHTML || relatedHTML ? '<div class="kw-section"><div class="exp-label">핵심 키워드</div><div class="kw-pills">' + kwHTML + '</div>' + (relatedHTML ? '<div class="exp-label" style="margin-top:14px">함께 알아두면 좋은 개념</div>' + relatedHTML : '') + '</div>' : '') +
+        '<button class="btn-close-ans" onclick="closeAns()">▲ 정답 닫기</button>' +
+      '</div>' +
+    '</div>';
+  area.appendChild(card);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectChoice(idx) {
+  selectedIdx = idx;
+  document.querySelectorAll('.choice').forEach(el => el.classList.remove('selected'));
+  const target = document.querySelector(`.choice[data-idx="${idx}"]`);
+  if (target) target.classList.add('selected');
+  const btn = document.getElementById('btn-reveal');
+  if (btn) btn.disabled = false;
+}
+
+function reveal() {
+  const q = pool[cursor];
+  // 정답/오답 표시
+  document.querySelectorAll('.choice').forEach(el => {
+    const idx = parseInt(el.dataset.idx, 10);
+    if (idx === q.answer) el.classList.add('is-correct');
+    else if (idx === selectedIdx) el.classList.add('is-wrong');
+    el.style.cursor = 'default';
+    el.onclick = null;
+  });
+  document.getElementById('ans-wrap').classList.add('open');
+  const btn  = document.getElementById('btn-reveal');
+  const skip = document.getElementById('btn-skip');
+  btn.textContent = '다음 문제';
+  btn.classList.add('revealed');
+  btn.onclick = next;
+  if (skip) skip.style.display = 'none';
+}
+
+function closeAns() {
+  document.getElementById('ans-wrap').classList.remove('open');
+  const btn  = document.getElementById('btn-reveal');
+  const skip = document.getElementById('btn-skip');
+  btn.textContent = '정답 확인';
+  btn.classList.remove('revealed');
+  btn.onclick = reveal;
+  if (skip) skip.style.display = '';
+}
+
+function next() { cursor++; selectedIdx = null; updateProgress(); showQuestion(); }
+
+function skip() {
+  if (pool.length <= 1) return;
+  const cur = pool.splice(cursor, 1)[0];
+  pool.push(cur);
+  selectedIdx = null;
+  showQuestion();
+}
+
+function restart() { rebuildPool(); }
+</script>
+</body>
+</html>
