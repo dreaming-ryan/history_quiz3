@@ -98,23 +98,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="logo-icon">韓</div>
     <div class="logo-text">한능검 <span>심화</span> 기출문제</div>
   </a>
-  <span class="header-badge" id="header-range">68~77회 전 회차</span>
+  <span class="header-badge" id="header-range">68~78회 전 회차</span>
 </header>
 
 <main class="main">
   <div class="hero">
     <span class="hero-eyebrow">한국사능력검정시험 심화 대비</span>
-    <h1>심화 기출문제<em id="hero-total"> 500선</em><br>완전 정복</h1>
-    <p id="hero-desc">68~77회 한국사능력검정시험(심화) 기출 복원문제<br>회차·단원별로 정답·해설·핵심 키워드까지 한 번에 학습하세요.</p>
+    <h1>심화 기출문제<em id="hero-total"> 550선</em><br>완전 정복</h1>
+    <p id="hero-desc">68~78회 한국사능력검정시험(심화) 기출 복원문제<br>회차·단원별로 정답·해설·핵심 키워드까지 한 번에 학습하세요.</p>
   </div>
 
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-num" id="stat-total">500<sub>문항</sub></div>
+      <div class="stat-num" id="stat-total">550<sub>문항</sub></div>
       <div class="stat-label">총 기출 문제</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num" id="stat-rounds">10<sub>회차</sub></div>
+      <div class="stat-num" id="stat-rounds">11<sub>회차</sub></div>
       <div class="stat-label">전체 회차 수록</div>
     </div>
     <div class="stat-card">
@@ -148,8 +148,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div class="card-desc">회차 순으로<br>실제 시험처럼 풀기</div>
         <div class="card-chips" id="chips-round">
           <span class="chip chip-p">68회~</span>
-          <span class="chip chip-p">77회</span>
-          <span class="chip chip-p">10회차</span>
+          <span class="chip chip-p">78회</span>
+          <span class="chip chip-p">11회차</span>
         </div>
       </div>
       <div class="card-arrow">↗</div>
@@ -195,18 +195,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div>
 </main>
 
-<footer class="footer" id="footer-text">한국사능력검정시험(심화) 기출문제 학습 자료 · 68~77회</footer>
+<footer class="footer" id="footer-text">한국사능력검정시험(심화) 기출문제 학습 자료 · 68~78회</footer>
 
 <script src="history_stats.js"></script>
 <script>
 HistoryStats.load(stats => {
   const fmt = HistoryStats.fmtComma;
 
-  // 1. 헤더 배지: "68~77회 전 회차"
+  // 1. 헤더 배지: "68~78회 전 회차"
   const headerRange = document.getElementById('header-range');
   if (headerRange) headerRange.textContent = `${stats.roundRangeText} 전 회차`;
 
-  // 2. hero 타이틀: "심화 기출문제 500선"
+  // 2. hero 타이틀: "심화 기출문제 550선"
   const heroTotal = document.getElementById('hero-total');
   if (heroTotal) heroTotal.textContent = ` ${fmt(stats.totalQ)}선`;
 
