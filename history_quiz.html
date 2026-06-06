@@ -616,6 +616,276 @@ body {
   .main-wrap { padding: 1.5rem 1rem 3rem; }
   .header-meta { display: none; }
 }
+
+/* ───────── 분할 화면 레이아웃 (Split View) ───────── */
+.filter-bar {
+  background: var(--c-surface);
+  border-bottom: 1.5px solid var(--c-border);
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  padding: 12px 1.5rem;
+  box-shadow: 0 1px 0 rgba(28,26,22,0.02);
+  display: none;
+}
+.filter-bar.open {
+  display: block;
+}
+
+/* 필터 토글 버튼 */
+.btn-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text2);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.btn-filter-toggle:hover {
+  border-color: var(--c-point);
+  color: var(--c-point);
+}
+.btn-filter-toggle.active {
+  background: var(--c-point);
+  color: #fff;
+  border-color: var(--c-point);
+}
+.btn-filter-toggle__icon {
+  width: 13px;
+  height: 13px;
+  transition: transform .2s ease;
+}
+.btn-filter-toggle.active .btn-filter-toggle__icon {
+  transform: rotate(180deg);
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-bar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.filter-bar .filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.filter-bar .filter-label {
+  margin: 0;
+  min-width: 36px;
+  font-size: 10px;
+}
+.filter-bar .filter-row {
+  margin: 0;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.filter-bar .tag {
+  font-size: 11.5px;
+  padding: 4px 11px;
+}
+
+.split-main {
+  display: flex;
+  gap: 14px;
+  max-width: 1400px;
+  margin: 1.25rem auto;
+  padding: 0 1.5rem;
+  align-items: stretch;
+  min-height: calc(100vh - 240px);
+}
+.pane {
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pane-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--c-accent-l);
+}
+.pane-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text);
+  margin: 0;
+}
+.q-counter {
+  font-size: 13px;
+  color: var(--c-text2);
+  font-weight: 500;
+  font-family: 'Noto Serif KR', serif;
+}
+.pane-scroll {
+  flex: 1 1 auto;
+  padding: 22px 24px;
+}
+.pane-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--c-bg);
+  gap: 8px;
+}
+.btn-nav {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--c-border2);
+  background: var(--c-surface);
+  color: var(--c-text2);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-nav:hover:not(:disabled) {
+  border-color: var(--c-point);
+  color: var(--c-point);
+  background: var(--c-point-l);
+}
+.btn-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.btn-nav.btn-prev::before { content: "← "; }
+.btn-nav.btn-next::after { content: " →"; }
+
+.answer-placeholder {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--c-text3);
+  font-size: 14px;
+  line-height: 1.9;
+  font-weight: 500;
+}
+.answer-placeholder .ph-icon {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 38px;
+  color: var(--c-border2);
+  margin-bottom: 14px;
+  display: block;
+}
+
+/* 카드 스타일을 분할 화면 내에서 조정 */
+.pane-scroll .card {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+.pane-scroll .card:hover {
+  border: none;
+  box-shadow: none;
+}
+.pane-scroll .card.revealed {
+  border: none;
+}
+.pane-scroll .answer-wrap {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+.pane-scroll .q-actions {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* 분할 화면 패널 내 정답/오답 색상 — .card.revealed 래퍼 없이도 동작 */
+#question-pane .choice.is-correct {
+  background: var(--c-correct-l);
+  border-color: var(--c-correct);
+  color: var(--c-correct);
+  font-weight: 500;
+  cursor: default;
+}
+#question-pane .choice.is-correct:hover {
+  background: var(--c-correct-l);
+  border-color: var(--c-correct);
+}
+#question-pane .choice.is-correct .choice__num {
+  color: var(--c-correct);
+}
+#question-pane .choice.selected.is-wrong {
+  background: var(--c-wrong-l);
+  border-color: var(--c-wrong);
+  color: var(--c-wrong);
+  cursor: default;
+}
+#question-pane .choice.selected.is-wrong:hover {
+  background: var(--c-wrong-l);
+  border-color: var(--c-wrong);
+}
+#question-pane .choice.selected.is-wrong .choice__num {
+  color: var(--c-wrong);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 900px) {
+  .split-main {
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+  .pane-right {
+    min-height: 240px;
+  }
+  /* 모바일에서는 필터 바를 고정하지 않음 */
+  .filter-bar {
+    position: static;
+    top: auto;
+  }
+}
+@media (max-width: 600px) {
+  .filter-bar {
+    padding: 10px 1rem;
+  }
+  .filter-bar .filter-section {
+    gap: 6px;
+  }
+  .filter-bar .tag {
+    font-size: 11px;
+    padding: 3px 9px;
+  }
+  .pane-scroll {
+    padding: 16px 18px;
+  }
+  .pane-footer {
+    padding: 10px 14px;
+  }
+  .btn-nav {
+    padding: 7px 14px;
+    font-size: 12.5px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -626,106 +896,97 @@ body {
       한국사능력검정시험
       <span class="logo-badge">제68~78회 심화</span>
     </a>
-    <a class="header-back" href="index.html" style="font-size:13px;color:var(--c-text2);text-decoration:none;padding:6px 14px;border-radius:20px;background:var(--c-bg);border:1px solid var(--c-border);transition:all .15s">← 홈으로</a>
+    <div class="header-actions">
+      <button class="btn-filter-toggle" id="btn-filter-toggle" aria-expanded="false">
+        <svg class="btn-filter-toggle__icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 .4.8L9.5 9.7V13a.5.5 0 0 1-.7.45l-2-1A.5.5 0 0 1 6.5 12V9.7L2.1 4.3A.5.5 0 0 1 2 3.5z"/>
+        </svg>
+        <span class="btn-filter-toggle__label">필터</span>
+      </button>
+      <a class="header-back" href="index.html" style="font-size:13px;color:var(--c-text2);text-decoration:none;padding:6px 14px;border-radius:20px;background:var(--c-bg);border:1px solid var(--c-border);transition:all .15s">← 홈으로</a>
+    </div>
   </div>
 </header>
 
-<section class="hero" id="top">
-  <div class="hero-inner">
-    <span class="hero-chip">제68~78회 심화 · 2023~2026년도</span>
-    <h1>한국사능력검정시험 <em>기출문제 풀이</em></h1>
-    <p class="hero-desc">
-      한능검 심화 기출시험에 대해 각 문항별 정답·해설·핵심 키워드를 정리했습니다.<br>
-      선택지를 고르고 <em style="color:var(--c-point); font-style:normal; font-weight:700;">정답 확인</em> 버튼을 눌러 실전처럼 학습해보세요.
-    </p>
-    <div class="stats-row">
-      <div class="stat-chip">
-        <div class="num" id="stat-total">9</div>
-        <div class="lbl">전체 문항<span>표시 기준</span></div>
+<!-- 상단 고정 필터 바 -->
+<section class="filter-bar">
+  <div class="filter-bar-inner">
+    <div class="filter-section">
+      <div class="filter-label">회차</div>
+      <div class="filter-row" id="filter-round">
+        <div class="tag active" data-value="all">전체</div>
+        <div class="tag" data-value="78">78회</div>
+        <div class="tag" data-value="77">77회</div>
+        <div class="tag" data-value="76">76회</div>
+        <div class="tag" data-value="75">75회</div>
+        <div class="tag" data-value="74">74회</div>
+        <div class="tag" data-value="73">73회</div>
+        <div class="tag" data-value="72">72회</div>
+        <div class="tag" data-value="71">71회</div>
+        <div class="tag" data-value="70">70회</div>
+        <div class="tag" data-value="69">69회</div>
+        <div class="tag" data-value="68">68회</div>
       </div>
-      <div class="stat-chip">
-        <div class="num" id="stat-solved">0</div>
-        <div class="lbl">풀이한 문제<span>이번 세션</span></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-label">단원</div>
+      <div class="filter-row" id="filter-subject">
+        <div class="tag active" data-value="all">전체</div>
+        <div class="tag" data-value="1">고대국가</div>
+        <div class="tag" data-value="2">삼국시대</div>
+        <div class="tag" data-value="3">고려시대</div>
+        <div class="tag" data-value="4">조선시대</div>
+        <div class="tag" data-value="5">개화시대</div>
+        <div class="tag" data-value="6">일제강점기</div>
+        <div class="tag" data-value="7">근현대사</div>
       </div>
-      <div class="stat-chip">
-        <div class="num" id="stat-correct">0</div>
-        <div class="lbl">맞힌 문제<span>정답률 <span id="stat-pct">0%</span></span></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-label">상태</div>
+      <div class="filter-row" id="filter-status">
+        <div class="tag active" data-value="all">전체</div>
+        <div class="tag" data-value="unsolved">미풀이</div>
+        <div class="tag" data-value="solved">풀이완료</div>
+        <div class="tag" data-value="wrong">오답만</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="main-wrap">
-
-  <div class="pdf-btn-wrap" style="display:flex;justify-content:center;margin-bottom:1.5rem">
-    <a class="pdf-btn"
-       href="https://dreaming-ryan.com/home?product=%ED%95%9C%EB%8A%A5%EA%B2%80%20%EC%9A%94%EC%95%BD%EB%85%B8%ED%8A%B8%20PDF"
-       target="_blank" rel="noopener noreferrer"
-       style="display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:50px;background:linear-gradient(135deg,#B83A3A 0%,#952E2E 100%);color:#fff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:-.02em;box-shadow:0 4px 18px rgba(184,58,58,.38);transition:all .22s ease;white-space:nowrap">
-      <span style="font-size:18px;line-height:1;flex-shrink:0">📙</span>
-      <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
-        <span>한능검 요약노트 PDF</span>
-        <span style="font-size:13px;font-weight:500;opacity:.9">무료 샘플 받기</span>
-      </span>
-    </a>
-  </div>
-
-  <div class="filter-section">
-    <div class="filter-label">회차</div>
-    <div class="filter-row" id="filter-round">
-      <div class="tag active" data-value="all">전체</div>
-      <div class="tag" data-value="78">78회</div>
-      <div class="tag" data-value="77">77회</div>
-      <div class="tag" data-value="76">76회</div>
-      <div class="tag" data-value="75">75회</div>
-      <div class="tag" data-value="74">74회</div>
-      <div class="tag" data-value="73">73회</div>
-      <div class="tag" data-value="72">72회</div>
-      <div class="tag" data-value="71">71회</div>
-      <div class="tag" data-value="70">70회</div>
-      <div class="tag" data-value="69">69회</div>
-      <div class="tag" data-value="68">68회</div>
+<!-- 분할 콘텐츠 영역 -->
+<main class="split-main">
+  <!-- 좌측: 문제 -->
+  <section class="pane pane-left">
+    <div class="pane-header">
+      <h2 class="pane-title">문제</h2>
+      <span class="q-counter" id="q-counter">0 / 0</span>
     </div>
-  </div>
-
-  <div class="filter-section">
-    <div class="filter-label">단원</div>
-    <div class="filter-row" id="filter-subject">
-      <div class="tag active" data-value="all">전체</div>
-      <div class="tag" data-value="1">고대국가</div>
-      <div class="tag" data-value="2">삼국시대</div>
-      <div class="tag" data-value="3">고려시대</div>
-      <div class="tag" data-value="4">조선시대</div>
-      <div class="tag" data-value="5">개화시대</div>
-      <div class="tag" data-value="6">일제강점기</div>
-      <div class="tag" data-value="7">근현대사</div>
+    <div class="pane-scroll">
+      <div id="question-pane"></div>
     </div>
-  </div>
-
-  <div class="filter-section">
-    <div class="filter-label">상태</div>
-    <div class="filter-row" id="filter-status">
-      <div class="tag active" data-value="all">전체</div>
-      <div class="tag" data-value="unsolved">미풀이</div>
-      <div class="tag" data-value="solved">풀이완료</div>
-      <div class="tag" data-value="wrong">오답만</div>
+    <div class="pane-footer">
+      <button class="btn-nav btn-prev" id="btn-prev">이전 문제</button>
+      <button class="btn-nav btn-next" id="btn-next">다음 문제</button>
     </div>
-  </div>
+  </section>
 
-  <div class="toolbar">
-    <div class="toolbar-left">
-      현재 <strong id="visible-count">9</strong>문 표시
-      <span class="progress-bar"><span class="progress-fill" id="progress-fill"></span></span>
-      <strong id="progress-pct">0%</strong>
+  <!-- 우측: 해설 -->
+  <section class="pane pane-right">
+    <div class="pane-header">
+      <h2 class="pane-title">해설</h2>
     </div>
-    <div class="toolbar-right">
-      <button class="btn-reset" id="btn-reset">초기화</button>
-      <button class="btn-all" id="btn-reveal-all">모든 정답 보기</button>
+    <div class="pane-scroll">
+      <div id="answer-pane">
+        <div class="answer-placeholder">
+          <span class="ph-icon">∅</span>
+          왼쪽에서 선택지를 고르고<br>
+          <strong style="color:var(--c-point);">정답 확인</strong> 버튼을 누르면<br>
+          여기에 정답과 해설이 표시됩니다
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div id="questions-root"></div>
-</div>
+  </section>
+</main>
 
 <footer class="site-footer">
   제76·77·78회 한국사능력검정시험 (심화) · 기출문제 풀이 <br>
@@ -18983,6 +19244,7 @@ const QUESTIONS = [
 ───────────────────────────────────────────────────────────── */
 const state = {
   filters: { round: "all", subject: "all", status: "all" },
+  currentIndex: 0,
   userAnswers: {}
 };
 const uaKey = q => `${q.round}-${q.no}`;
@@ -19005,21 +19267,12 @@ function escapeHTML(str) {
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-function renderQuestion(q) {
+function renderQuestionPane(q) {
   const ua = state.userAnswers[uaKey(q)];
-  const card = document.createElement("article");
-  card.className = "card";
-  if (ua.revealed) card.classList.add("revealed");
-  card.dataset.no = q.no;
-  card.dataset.round = q.round;
 
-  /* Sub-content (문제 시각자료 - HTML/이미지 허용) */
   let subHTML = "";
-  if (q.sub) {
-    subHTML = `<div class="q-scene">${q.sub}</div>`;
-  }
+  if (q.sub) subHTML = `<div class="q-scene">${q.sub}</div>`;
 
-  /* 보기 — 이미지 보기는 <img>로 시작하므로 HTML 그대로 사용 */
   const choicesHTML = q.choices.map((c, i) => {
     const idx = i + 1;
     const isCorrect = idx === q.answer;
@@ -19035,6 +19288,67 @@ function renderQuestion(q) {
       </li>`;
   }).join("");
 
+  const html = `
+    <div class="card-meta">
+      <span class="badge-q">Q.${String(q.no).padStart(2, "0")}</span>
+      <span class="badge-round">${q.round}회 심화</span>
+      <span class="badge-cat cat-${q.subject}">${SUBJECT_NAME[q.subject]}</span>
+    </div>
+    <div class="q-text">${escapeHTML(q.stem)}</div>
+    ${subHTML}
+    <ul class="choices">${choicesHTML}</ul>
+    <div class="q-actions">
+      <button class="btn-check" data-action="reveal" ${ua.selected === null && !ua.revealed ? "disabled" : ""}>
+        ${ua.revealed ? "다시 풀기" : "정답 확인"}
+      </button>
+      <a class="btn-inquiry" href="http://pf.kakao.com/_xeYdxlX" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+        <svg class="btn-inquiry__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#3A1D1D" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.78 1.86 5.22 4.66 6.62l-1.18 4.32c-.1.36.31.65.62.44l5.18-3.42c.24.02.48.04.72.04 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg> 오류신고
+      </a>
+    </div>
+  `;
+
+  const pane = document.getElementById("question-pane");
+  pane.innerHTML = html;
+
+  /* Choice click */
+  pane.querySelectorAll(".choice").forEach(el => {
+    el.addEventListener("click", () => {
+      if (ua.revealed) return;
+      const idx = parseInt(el.dataset.idx, 10);
+      ua.selected = idx;
+      renderQuestionPane(q);
+    });
+  });
+
+  /* Reveal button */
+  pane.querySelector('[data-action="reveal"]').addEventListener("click", () => {
+    if (ua.revealed) {
+      ua.selected = null;
+      ua.revealed = false;
+    } else {
+      if (ua.selected === null) return;
+      ua.revealed = true;
+    }
+    renderQuestionPane(q);
+    renderAnswerPane(q);
+  });
+}
+
+function renderAnswerPane(q) {
+  const ua = state.userAnswers[uaKey(q)];
+  const pane = document.getElementById("answer-pane");
+
+  if (!ua.revealed) {
+    pane.innerHTML = `
+      <div class="answer-placeholder">
+        <span class="ph-icon">∅</span>
+        왼쪽에서 선택지를 고르고<br>
+        <strong style="color:var(--c-point);">정답 확인</strong> 버튼을 누르면<br>
+        여기에 정답과 해설이 표시됩니다
+      </div>`;
+    return;
+  }
+
   const keywordsHTML = q.keywords.map(k => `<span class="kw-pill">#${escapeHTML(k)}</span>`).join("");
 
   let relatedHTML = "";
@@ -19048,41 +19362,20 @@ function renderQuestion(q) {
       `</div>`;
   }
 
-  /* 정답 표시: 이미지 보기인 경우 이미지로, 아니면 텍스트로 */
   const answerChoice = q.choices[q.answer - 1];
   const answerDisplay = answerChoice.startsWith("<img") ? answerChoice : escapeHTML(answerChoice);
 
-  card.innerHTML = `
-    <div class="card-meta">
-      <span class="badge-q">Q.${String(q.no).padStart(2, "0")}</span>
-      <span class="badge-round">${q.round}회 심화</span>
-      <span class="badge-cat cat-${q.subject}">${SUBJECT_NAME[q.subject]}</span>
-    </div>
-    <div class="q-text">${escapeHTML(q.stem)}</div>
-    ${subHTML}
-    <ul class="choices">${choicesHTML}</ul>
-
-    <div class="q-actions">
-      <button class="btn-check" data-action="reveal" ${ua.selected === null && !ua.revealed ? "disabled" : ""}>
-        ${ua.revealed ? "다시 풀기" : "정답 확인"}
-      </button>
-      <a class="btn-inquiry" href="http://pf.kakao.com/_xeYdxlX" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-        <svg class="btn-inquiry__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#3A1D1D" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.78 1.86 5.22 4.66 6.62l-1.18 4.32c-.1.36.31.65.62.44l5.18-3.42c.24.02.48.04.72.04 5.52 0 10-3.48 10-7.8S17.52 3 12 3z"/></svg> 오류신고
-      </a>
-    </div>
-
-    <div class="answer-wrap ${ua.revealed ? 'open' : ''}">
+  pane.innerHTML = `
+    <div class="answer-wrap open">
       <div class="answer-label">정답</div>
       <div class="answer-val">
         <span class="answer-val__num">${CIRCLE[q.answer - 1]}</span>
         <span>${answerDisplay}</span>
       </div>
-
       <div class="exp-section">
         <div class="exp-section-label">해설</div>
         <div class="exp-body">${q.explain}</div>
       </div>
-
       <div class="keyword-section">
         <div class="keyword-group">
           <div class="keyword-label">핵심 키워드</div>
@@ -19095,45 +19388,10 @@ function renderQuestion(q) {
       </div>
     </div>
   `;
-
-  /* Choice click */
-  card.querySelectorAll(".choice").forEach(el => {
-    el.addEventListener("click", () => {
-      if (ua.revealed) return;
-      const idx = parseInt(el.dataset.idx, 10);
-      ua.selected = idx;
-      rerenderCard(q);
-    });
-  });
-
-  /* Reveal button */
-  card.querySelector('[data-action="reveal"]').addEventListener("click", () => {
-    if (ua.revealed) {
-      ua.selected = null;
-      ua.revealed = false;
-    } else {
-      if (ua.selected === null) return;
-      ua.revealed = true;
-    }
-    rerenderCard(q);
-    updateStats();
-  });
-
-  return card;
 }
 
-function rerenderCard(q) {
-  const old = document.querySelector(`.card[data-no="${q.no}"][data-round="${q.round}"]`);
-  if (!old) return;
-  const fresh = renderQuestion(q);
-  old.replaceWith(fresh);
-}
-
-function renderAll() {
-  const root = document.getElementById("questions-root");
-  root.innerHTML = "";
-
-  const visible = QUESTIONS.filter(q => {
+function getFilteredQuestions() {
+  return QUESTIONS.filter(q => {
     const { round: roundF, subject, status } = state.filters;
     if (roundF !== "all" && String(q.round) !== roundF) return false;
     if (subject !== "all" && String(q.subject) !== subject) return false;
@@ -19147,36 +19405,52 @@ function renderAll() {
     }
     return true;
   });
+}
 
-  if (visible.length === 0) {
-    root.innerHTML = `
+function renderCurrent() {
+  const filtered = getFilteredQuestions();
+  const qPane = document.getElementById("question-pane");
+  const aPane = document.getElementById("answer-pane");
+  const counter = document.getElementById("q-counter");
+  const btnPrev = document.getElementById("btn-prev");
+  const btnNext = document.getElementById("btn-next");
+
+  if (filtered.length === 0) {
+    qPane.innerHTML = `
       <div class="empty">
         <div class="empty-icon">∅</div>
         <div>해당 조건의 문항이 없습니다.</div>
         <div style="margin-top:6px; font-size:12px;">필터를 바꾸거나 초기화해 주세요.</div>
       </div>`;
-  } else {
-    visible.forEach(q => root.appendChild(renderQuestion(q)));
+    aPane.innerHTML = `
+      <div class="answer-placeholder">
+        <span class="ph-icon">∅</span>
+        표시할 해설이 없습니다
+      </div>`;
+    counter.textContent = "0 / 0";
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
+    return;
   }
 
-  document.getElementById("visible-count").textContent = visible.length;
-  updateStats();
-}
+  if (state.currentIndex < 0) state.currentIndex = 0;
+  if (state.currentIndex >= filtered.length) state.currentIndex = filtered.length - 1;
 
-function updateStats() {
-  const solved = Object.values(state.userAnswers).filter(a => a.revealed).length;
-  const correct = QUESTIONS.filter(q => {
-    const a = state.userAnswers[uaKey(q)];
-    return a.revealed && a.selected === q.answer;
-  }).length;
-  const pct = solved === 0 ? 0 : Math.round((correct / solved) * 100);
-  const progressPct = Math.round((solved / QUESTIONS.length) * 100);
+  const q = filtered[state.currentIndex];
+  renderQuestionPane(q);
+  renderAnswerPane(q);
 
-  document.getElementById("stat-solved").textContent = solved;
-  document.getElementById("stat-correct").textContent = correct;
-  document.getElementById("stat-pct").textContent = pct + "%";
-  document.getElementById("progress-fill").style.width = progressPct + "%";
-  document.getElementById("progress-pct").textContent = progressPct + "%";
+  counter.textContent = (state.currentIndex + 1) + " / " + filtered.length;
+  btnPrev.disabled = state.currentIndex === 0;
+  btnNext.disabled = state.currentIndex === filtered.length - 1;
+
+  /* 페이지 상단으로 스크롤 (분할 화면 영역 시작 위치) */
+  const splitMain = document.querySelector(".split-main");
+  if (splitMain) {
+    const rect = splitMain.getBoundingClientRect();
+    const offset = window.scrollY + rect.top - 120;
+    if (window.scrollY > offset) window.scrollTo({ top: offset, behavior: "instant" });
+  }
 }
 
 function bindFilter(containerId, key) {
@@ -19187,12 +19461,52 @@ function bindFilter(containerId, key) {
     container.querySelectorAll(".tag").forEach(t => t.classList.remove("active"));
     btn.classList.add("active");
     state.filters[key] = btn.dataset.value;
-    renderAll();
+    state.currentIndex = 0;
+    renderCurrent();
   });
 }
 bindFilter("filter-round", "round");
 bindFilter("filter-subject", "subject");
 bindFilter("filter-status", "status");
+
+/* 필터 바 토글 버튼 */
+(function bindFilterToggle() {
+  const btn = document.getElementById("btn-filter-toggle");
+  const bar = document.querySelector(".filter-bar");
+  if (!btn || !bar) return;
+  btn.addEventListener("click", () => {
+    const isOpen = bar.classList.toggle("open");
+    btn.classList.toggle("active", isOpen);
+    btn.setAttribute("aria-expanded", String(isOpen));
+    const label = btn.querySelector(".btn-filter-toggle__label");
+    if (label) label.textContent = isOpen ? "필터 닫기" : "필터";
+  });
+})();
+
+/* 이전/다음 버튼 */
+document.getElementById("btn-prev").addEventListener("click", () => {
+  if (state.currentIndex > 0) {
+    state.currentIndex--;
+    renderCurrent();
+  }
+});
+document.getElementById("btn-next").addEventListener("click", () => {
+  const filtered = getFilteredQuestions();
+  if (state.currentIndex < filtered.length - 1) {
+    state.currentIndex++;
+    renderCurrent();
+  }
+});
+
+/* 키보드 단축키: ← / → */
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+  if (e.key === "ArrowLeft") {
+    document.getElementById("btn-prev").click();
+  } else if (e.key === "ArrowRight") {
+    document.getElementById("btn-next").click();
+  }
+});
 
 /* URL 파라미터(?round=77 / ?subject=3)로 진입한 경우 해당 필터 자동 적용 */
 (function applyUrlFilters() {
@@ -19213,37 +19527,7 @@ bindFilter("filter-status", "status");
   });
 })();
 
-document.getElementById("stat-total").textContent = QUESTIONS.length;
-
-document.getElementById("btn-reveal-all").addEventListener("click", () => {
-  const btn = document.getElementById("btn-reveal-all");
-  const allOpen = QUESTIONS.every(q => state.userAnswers[uaKey(q)].revealed);
-  if (allOpen) {
-    QUESTIONS.forEach(q => state.userAnswers[uaKey(q)].revealed = false);
-    btn.textContent = "모든 정답 보기";
-    btn.classList.remove("open");
-  } else {
-    QUESTIONS.forEach(q => {
-      state.userAnswers[uaKey(q)].revealed = true;
-      if (state.userAnswers[uaKey(q)].selected === null) {
-        state.userAnswers[uaKey(q)].selected = q.answer;
-      }
-    });
-    btn.textContent = "모든 정답 닫기";
-    btn.classList.add("open");
-  }
-  renderAll();
-});
-document.getElementById("btn-reset").addEventListener("click", () => {
-  if (!confirm("모든 풀이 기록을 초기화할까요?")) return;
-  QUESTIONS.forEach(q => state.userAnswers[uaKey(q)] = { selected: null, revealed: false });
-  const btn = document.getElementById("btn-reveal-all");
-  btn.textContent = "모든 정답 보기";
-  btn.classList.remove("open");
-  renderAll();
-});
-
-renderAll();
+renderCurrent();
 </script>
 </body>
 </html>
