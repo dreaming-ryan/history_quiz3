@@ -69,7 +69,26 @@ body {
   font-family: 'Noto Serif KR', serif;
   font-size: 15px; font-weight: 700;
   color: var(--c-text); text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+.header-back {
+  font-size: 13px;
+  color: var(--c-text2);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  transition: all .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.header-back:hover {
+  border-color: var(--c-point);
+  color: var(--c-point);
+}
+.header-inner { flex-wrap: nowrap; }
 .logo-badge {
   background: var(--c-point); color: #fff;
   font-family: 'Noto Sans KR', sans-serif;
@@ -853,9 +872,16 @@ body {
   .split-main {
     flex-direction: column;
     padding: 0 1rem;
+    min-height: auto;
+    gap: 12px;
+  }
+  /* 모바일에서는 패널이 콘텐츠 높이만큼만 차지하고, 클리핑 없이 모두 보이도록 */
+  .pane {
+    flex: 0 0 auto;
+    overflow: visible;
   }
   .pane-right {
-    min-height: 240px;
+    min-height: auto;
   }
   /* 모바일에서는 필터 바를 고정하지 않음 */
   .filter-bar {
@@ -864,6 +890,14 @@ body {
   }
 }
 @media (max-width: 600px) {
+  .site-header { padding: 0 1rem; }
+  .header-inner { gap: 6px; }
+  .logo { font-size: 13.5px; gap: 6px; }
+  .header-back { font-size: 12px; padding: 5px 10px; }
+  .btn-filter-toggle {
+    font-size: 12px;
+    padding: 5px 11px;
+  }
   .filter-bar {
     padding: 10px 1rem;
   }
@@ -894,7 +928,6 @@ body {
   <div class="header-inner">
     <a class="logo" href="index.html">
       한국사능력검정시험
-      <span class="logo-badge">제68~78회 심화</span>
     </a>
     <div class="header-actions">
       <button class="btn-filter-toggle" id="btn-filter-toggle" aria-expanded="false">
@@ -903,7 +936,7 @@ body {
         </svg>
         <span class="btn-filter-toggle__label">필터</span>
       </button>
-      <a class="header-back" href="index.html" style="font-size:13px;color:var(--c-text2);text-decoration:none;padding:6px 14px;border-radius:20px;background:var(--c-bg);border:1px solid var(--c-border);transition:all .15s">← 홈으로</a>
+      <a class="header-back" href="index.html">← 홈으로</a>
     </div>
   </div>
 </header>
